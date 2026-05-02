@@ -1,27 +1,28 @@
 name: Test Python App
 
-on: [push]
+on:
+  push:
+    branches: [ "*" ]
+  pull_request:
+    branches: [ "*" ]
 
 jobs:
   ci:
     runs-on: ubuntu-latest
+    
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
-      env:
-        FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true  # <-- Добавьте эту строку
       
     - name: Setup Python
       uses: actions/setup-python@v5
-      env:
-        FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true  # <-- И эту
       with:
         python-version: '3.12'
         
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install pytest httpx fastapi uvicorn
+        pip install fastapi uvicorn pytest httpx pydantic-settings
         
     - name: Run tests
       run: python -m pytest tests/ -v
