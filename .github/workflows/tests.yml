@@ -1,24 +1,20 @@
 name: Test Python App
 
-on:
-  push:
-    branches: [ "*" ]
-  pull_request:
-    branches: [ "*" ]
-
-env:
-  ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION: "true"
+on: [push]
 
 jobs:
   ci:
     runs-on: ubuntu-latest
-    
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
+      env:
+        FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true  # <-- Добавьте эту строку
       
     - name: Setup Python
       uses: actions/setup-python@v5
+      env:
+        FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true  # <-- И эту
       with:
         python-version: '3.12'
         
@@ -28,5 +24,4 @@ jobs:
         pip install pytest httpx fastapi uvicorn
         
     - name: Run tests
-      run: |
-        python -m pytest tests/ -v
+      run: python -m pytest tests/ -v
